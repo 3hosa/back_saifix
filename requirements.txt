@@ -9,3 +9,4 @@ django-filter==23.5
 django-extensions==3.2.3
 setuptools
 requests
+gunicorn>=21.2
