@@ -8,3 +8,4 @@ psycopg2-binary==2.9.7
 django-filter==23.5
 django-extensions==3.2.3
 setuptools
+requests
