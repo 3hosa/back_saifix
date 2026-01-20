@@ -66,3 +66,16 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.user.username}"
+
+class BroadcastNotification(models.Model):
+    title = models.CharField(max_length=255, verbose_name="العنوان")
+    message = models.TextField(verbose_name="الرسالة")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاريخ الإرسال")
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "إشعار جماعي"
+        verbose_name_plural = "الإشعارات الجماعية"
+
+    def __str__(self):
+        return self.title
