@@ -19,24 +19,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from apps.authentication.views import KYCSubmissionView
-
-from django.http import HttpResponse
-
-def home(request):
-    return HttpResponse("<h1>Welcome to Saifi Backend</h1><p>API is running.</p>")
-
 urlpatterns = [
     path('', home, name='home'),
     path('admin/', admin.site.urls),
     path('api/core/', include('apps.authentication.urls')),
     path('api/wallets/', include('apps.wallets.urls')),
     path('api/financials/', include('apps.financials.urls')),
-    path('api/financials/', include('apps.financials.urls')),
     path('api/recharge-payment/', include('apps.recharge_and_payment.urls')),
-    
-    # Fallback/Direct route for KYC to handle legacy calls
-    path('api/kyc/requests/', KYCSubmissionView.as_view(), name='kyc-submission-direct'),
 ]
 
 if settings.DEBUG:
