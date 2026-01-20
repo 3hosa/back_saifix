@@ -15,4 +15,5 @@ urlpatterns = [
     path('notifications/', NotificationListView.as_view(), name='notifications-list'),
     path('notifications/mark_all_read/', MarkNotificationsReadView.as_view(), name='notifications-mark-read'),
     path('notifications/broadcast/', BroadcastNotificationCreateView.as_view(), name='broadcast-notification'),
+    path('notifications/public-latest/', PublicBroadcastNotificationView.as_view(), name='public-latest-notification'),
 ]
