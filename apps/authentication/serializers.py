@@ -76,3 +76,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+class BroadcastNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BroadcastNotification
+        fields = ['id', 'title', 'message', 'created_at']
