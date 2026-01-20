@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
-from .models import User
+from .models import User, Notification, BroadcastNotification
 
 class CustomUserAdmin(UserAdmin):
     model = User
@@ -37,3 +37,33 @@ class CustomUserAdmin(UserAdmin):
     display_photos.short_description = "معاينة الوثائق"
 
 admin.site.register(User, CustomUserAdmin)
+
+@admin.register(BroadcastNotification)
+class BroadcastNotificationAdmin(admin.ModelAdmin):
+    list_display = ['title', 'created_at']
+    search_fields = ['title', 'message']
+
+    def save_model(self, request, obj, form, change):
+        # Save the broadcast record first
+        super().save_model(request, obj, form, change)
+        
+        # Only broadcast on creation, not on edit
+        if not change:
+            users = User.objects.filter(is_active=True)
+            batch_size = 500
+            notifications = []
+            
+            for user in users:
+                notifications.append(Notification(
+                    user=user,
+                    title=obj.title,
+                    message=obj.message
+                ))
+                
+                # Bulk create in batches to avoid memory issues
+                if len(notifications) >= batch_size:
+                    Notification.objects.bulk_create(notifications)
+                    notifications = []
+                    
+            if notifications:
+                Notification.objects.bulk_create(notifications)
