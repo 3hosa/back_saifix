@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import LoginView, RegisterView, UserListView, UserUpdateView, UserDeleteView, UserDetailView, KYCSubmissionView, AdminPasswordResetView, NotificationListView, MarkNotificationsReadView, BroadcastNotificationCreateView
+from .views import LoginView, RegisterView, UserListView, UserUpdateView, UserDeleteView, UserDetailView, KYCSubmissionView, AdminPasswordResetView, NotificationListView, MarkNotificationsReadView, BroadcastNotificationCreateView, PublicBroadcastNotificationView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -17,3 +17,4 @@ urlpatterns = [
     path('notifications/broadcast/', BroadcastNotificationCreateView.as_view(), name='broadcast-notification'),
     path('notifications/public-latest/', PublicBroadcastNotificationView.as_view(), name='public-latest-notification'),
 ]
+
