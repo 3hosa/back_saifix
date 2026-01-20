@@ -191,3 +191,12 @@ class BroadcastNotificationCreateView(generics.CreateAPIView):
     queryset = BroadcastNotification.objects.all()
     serializer_class = BroadcastNotificationSerializer
     permission_classes = [AllowAny] # In production this should be restricted
+
+class PublicBroadcastNotificationView(views.APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        latest = BroadcastNotification.objects.order_by('-created_at').first()
+        if latest:
+            return Response(BroadcastNotificationSerializer(latest).data)
+        return Response({"detail": "No notifications found"}, status=status.HTTP_404_NOT_FOUND)
