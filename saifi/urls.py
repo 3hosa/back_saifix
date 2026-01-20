@@ -18,6 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("<h1>Welcome to Saifi Backend</h1><p>API is running.</p>")
 
 urlpatterns = [
     path('', home, name='home'),
@@ -30,3 +34,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
