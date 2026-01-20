@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-from .serializers import UserRegistrationSerializer
-from .models import User, Notification
+from .serializers import UserRegistrationSerializer, BroadcastNotificationSerializer
+from .models import User, Notification, BroadcastNotification
 from rest_framework import filters
 
 class LoginView(views.APIView):
@@ -186,3 +186,8 @@ class MarkNotificationsReadView(views.APIView):
     def post(self, request):
         request.user.notifications.update(is_read=True)
         return Response({"status": "success"})
+
+class BroadcastNotificationCreateView(generics.CreateAPIView):
+    queryset = BroadcastNotification.objects.all()
+    serializer_class = BroadcastNotificationSerializer
+    permission_classes = [AllowAny] # In production this should be restricted
