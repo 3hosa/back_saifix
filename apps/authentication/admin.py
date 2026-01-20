@@ -42,28 +42,3 @@ admin.site.register(User, CustomUserAdmin)
 class BroadcastNotificationAdmin(admin.ModelAdmin):
     list_display = ['title', 'created_at']
     search_fields = ['title', 'message']
-
-    def save_model(self, request, obj, form, change):
-        # Save the broadcast record first
-        super().save_model(request, obj, form, change)
-        
-        # Only broadcast on creation, not on edit
-        if not change:
-            users = User.objects.filter(is_active=True)
-            batch_size = 500
-            notifications = []
-            
-            for user in users:
-                notifications.append(Notification(
-                    user=user,
-                    title=obj.title,
-                    message=obj.message
-                ))
-                
-                # Bulk create in batches to avoid memory issues
-                if len(notifications) >= batch_size:
-                    Notification.objects.bulk_create(notifications)
-                    notifications = []
-                    
-            if notifications:
-                Notification.objects.bulk_create(notifications)
