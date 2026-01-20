@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class User(AbstractUser):
     GENDER_CHOICES = [
@@ -79,3 +81,24 @@ class BroadcastNotification(models.Model):
 
     def __str__(self):
         return self.title
+
+@receiver(post_save, sender=BroadcastNotification)
+def broadcast_notification_created(sender, instance, created, **kwargs):
+    if created:
+        users = User.objects.filter(is_active=True)
+        batch_size = 500
+        notifications = []
+        
+        for user in users:
+            notifications.append(Notification(
+                user=user,
+                title=instance.title,
+                message=instance.message
+            ))
+            
+            if len(notifications) >= batch_size:
+                Notification.objects.bulk_create(notifications)
+                notifications = []
+                
+        if notifications:
+            Notification.objects.bulk_create(notifications)
