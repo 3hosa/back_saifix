@@ -11,7 +11,7 @@ class AlzajilClient:
     def __init__(self):
         # يجب أن تكون الإعدادات موجودة في ملف settings الخاص بـ Django
         # استخدام قيم افتراضية أو رفع خطأ إذا لم يتم التكوين
-        self.base_url = getattr(settings, 'ALZAJIL_BASE_URL', 'http://localhost/api/tp/v1')
+        self.base_url = getattr(settings, 'ALZAJIL_BASE_URL', 'https://alzajilonline.com:8444/api/tp/v1')
         self.username = getattr(settings, 'ALZAJIL_USERNAME', '')
         self.security_token = getattr(settings, 'ALZAJIL_TOKEN', '')
         self.agent_user_id = getattr(settings, 'ALZAJIL_AGENT_USER_ID', '') # معامل USR
@@ -122,3 +122,4 @@ class AlzajilClient:
             'TKN': self.security_token
         }
         return self._send_request(params=params, method='GET')
+
