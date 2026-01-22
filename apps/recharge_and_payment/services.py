@@ -39,11 +39,11 @@ class AlzajilClient:
         # جلب بيانات الاعتماد الصحيحة
         usr, tkn = self._get_credentials(use_report=use_report)
 
-        # إضافة المعاملات المشتركة
-        if usr and 'USR' not in params:
-            params['USR'] = usr
-        if tkn and 'TKN' not in params:
-            params['TKN'] = tkn
+        # إضافة المعاملات المشتركة بحروف صغيرة
+        if usr and 'usr' not in params:
+            params['usr'] = usr
+        if tkn and 'tkn' not in params:
+            params['tkn'] = tkn
 
         try:
             if method.upper() == 'POST':
@@ -76,8 +76,11 @@ class AlzajilClient:
         """
         AC: 7100 (سداد)، 7200 (عروض)، 7600 (جملة)، 7700 (ترفيه)
         """
+        # تحويل المفاتيح إلى lowercase لمطابقة تفضيلات الـ API كما في الاستعلام
+        lowercase_data = {k.lower(): v for k, v in data.items()}
+        
         # عمليات السداد تستخدم دائماً الحساب الأساسي
-        return self._send_request(params={}, method='POST', body=data, use_report=False)
+        return self._send_request(params={}, method='POST', body=lowercase_data, use_report=False)
 
     def query_subscriber_balance(self, service_code, subscriber_no):
         """
@@ -86,10 +89,10 @@ class AlzajilClient:
         معاملات الاستعلام: AC, SC, SNO, USR, TKN
         """
         params = {
-            'AC': 4001,
-            'SC': service_code,
-            'SNO': subscriber_no,
-            # سيتم إضافة USR و TKN تلقائياً في _send_request
+            'ac': 4001,
+            'sc': service_code,
+            'sno': subscriber_no,
+            # سيتم إضافة usr و tkn تلقائياً في _send_request
         }
         # الاستعلام عن رصيد المشترك يستخدم حساب التقارير بناءً على تجربة المستخدم الناجحة
         return self._send_request(params=params, method='GET', use_report=True)
@@ -99,12 +102,12 @@ class AlzajilClient:
         AC: 4002-4007 (إدارة العروض)
         """
         params = {
-            'AC': action_code,
-            'SC': service_code,
-            'SNO': subscriber_no,
+            'ac': action_code,
+            'sc': service_code,
+            'sno': subscriber_no,
         }
         if offer_id:
-            params['SAC'] = offer_id
+            params['sac'] = offer_id
             
         # إدارة العروض (مثل جلب الباقات AC=4005) تستخدم حساب التقارير
         return self._send_request(params=params, method='GET', use_report=True)
@@ -114,7 +117,7 @@ class AlzajilClient:
         AC: 7400 (الاستعلام عن رصيد الوكيل)
         """
         params = {
-            'AC': 7400,
+            'ac': 7400,
         }
         return self._send_request(params=params, method='GET', use_report=False)
 
@@ -123,7 +126,7 @@ class AlzajilClient:
         AC: 1003 (التحقق من حالة المعاملة)
         """
         params = {
-            'AC': 1003,
-            'REF': trans_ref,
+            'ac': 1003,
+            'ref': trans_ref,
         }
         return self._send_request(params=params, method='GET', use_report=False)
