@@ -137,9 +137,10 @@ AUTH_PASSWORD_VALIDATORS = [
 STATIC_URL = 'static/'
 
 # Alzajil (Utility Payment Service) Settings
-ALZAJIL_BASE_URL = 'http://api.s2d-sys.com/api/tp/v1' # Example URL for S2D-Sys
+ALZAJIL_BASE_URL = 'https://alzajilonline.com:8448/api/tp/v1' # Example URL for S2D-Sys
 ALZAJIL_USERNAME = 'alsaifitest'
 ALZAJIL_TOKEN = 'alat@210126' # In many implementations, Password acts as the Security Token
 ALZAJIL_AGENT_USER_ID = 'alsaifitest' # USR parameter, usually same as Username or provided ID
 ALZAJIL_REPORT_USERNAME = 'alsaifitest_rep'
 ALZAJIL_REPORT_PASSWORD = '81497136'
+
