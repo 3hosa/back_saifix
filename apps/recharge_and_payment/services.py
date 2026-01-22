@@ -31,14 +31,13 @@ class AlzajilClient:
 
         try:
             if method.upper() == 'POST':
-                # بالنسبة للدفع (AC=7100، إلخ)، تقول الوثائق:
-                # الطريقة: POST
-                # الجسم: سلسلة JSON تحتوي على جميع الحقول أدناه.
-                response = requests.post(self.base_url, json=body, params=params)
+                # استخدام verify=False لأن بعض بوابات الدفع المحلية قد تواجه مشاكل في شهادات SSL
+                response = requests.post(self.base_url, json=body, params=params, verify=False, timeout=30)
             else:
-                response = requests.get(self.base_url, params=params)
+                response = requests.get(self.base_url, params=params, verify=False, timeout=30)
             
-            response.raise_for_status()
+            # محاولة قراءة الاستجابة حتى لو كان الـ status code غير ناجح (مثل 400 أو 500 من الزاجل)
+            # ورفع استثناء فقط إذا فشل الاتصال تماماً
             return response.json()
         except requests.exceptions.RequestException as e:
             # معالجة أخطاء الاتصال
